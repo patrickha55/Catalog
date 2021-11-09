@@ -9,7 +9,7 @@ namespace Catalog.Controllers
     {
         public ItemsController()
         {
-
+            Catalog.Repository.Class1 class1 = new();
         }
 
         [HttpGet]
