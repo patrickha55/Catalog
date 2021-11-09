@@ -1,4 +1,4 @@
-using Catalog.Data.MapperConfiguration;
+using Catalog.Data.Configuration.MapperConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 

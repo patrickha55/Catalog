@@ -1,3 +1,5 @@
+using System;
+
 namespace Catalog.Data.DTOs
 {
     public class ItemDTO : ManageItemDTO

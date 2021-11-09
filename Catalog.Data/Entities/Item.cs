@@ -1,3 +1,5 @@
+using System;
+
 namespace Catalog.Data.Entities
 {
     public record Item

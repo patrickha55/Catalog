@@ -2,7 +2,7 @@ using AutoMapper;
 using Catalog.Data.Entities;
 using Catalog.Data.DTOs;
 
-namespace Catalog.Data.MapperConfiguration
+namespace Catalog.Data.Configuration.MapperConfiguration
 {
     public class Initializer : Profile
     {
