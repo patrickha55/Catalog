@@ -7,7 +7,7 @@ namespace Catalog.Repository.ItemRepositories
         Task<IEnumerable<Item>> GetItemsAsync();
         Task<Item> GetItemAsync(string name);
         Task CreateAsync(Item request);
-        Task UpdateAsync(Item request);
+        Task UpdateAsync(string name, Item request);
         Task DeleteAsync(string name);
     }
 }

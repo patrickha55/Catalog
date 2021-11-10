@@ -1,4 +1,5 @@
 using Catalog.Data.Entities;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Catalog.Repository.ItemRepositories
@@ -7,38 +8,49 @@ namespace Catalog.Repository.ItemRepositories
     {
         private const string databaseName = "CatalogDb";
         private const string collectionName = "items";
-        private readonly IMongoCollection<Item> items;
+        private readonly IMongoCollection<Item> itemCollection;
+        private readonly FilterDefinitionBuilder<Item> filterBuilder = Builders<Item>.Filter;
 
         public MongoDbItemRepository(IMongoClient mongoClient)
         {
             IMongoDatabase database = mongoClient.GetDatabase(databaseName);
-            items = database.GetCollection<Item>(collectionName);
+            itemCollection = database.GetCollection<Item>(collectionName);
         }
 
-        public Task<Item> GetItemAsync(string name)
+        public async Task<Item> GetItemAsync(string name)
         {
-            throw new NotImplementedException();
+
+            var filter = CreateFilter(name);
+            return await itemCollection.Find(filter).SingleOrDefaultAsync();
         }
 
-        public Task<IEnumerable<Item>> GetItemsAsync()
+        public async Task<IEnumerable<Item>> GetItemsAsync()
         {
-            throw new NotImplementedException();
+            var items = await itemCollection.FindAsync(new BsonDocument());
+            return items.ToList();
         }
 
         public async Task CreateAsync(Item item)
         {
 
-            await items.InsertOneAsync(item);
+            await itemCollection.InsertOneAsync(item);
         }
 
-        public Task UpdateAsync(Item item)
+        public async Task UpdateAsync(string name, Item item)
         {
-            throw new NotImplementedException();
+            var filter = CreateFilter(name);
+            await itemCollection.ReplaceOneAsync(filter, item);
         }
 
-        public Task DeleteAsync(string name)
+        public async Task DeleteAsync(string name)
         {
-            throw new NotImplementedException();
+            var filter = CreateFilter(name);
+            await itemCollection.DeleteOneAsync(filter);
+        }
+
+        private FilterDefinition<Item> CreateFilter(string filterValue)
+        {
+            return filterBuilder.Eq(i => i.Name, filterValue);
         }
     }
 }
