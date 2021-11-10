@@ -25,13 +25,13 @@ namespace Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<ItemDTO>>> Get()
+        public async Task<ActionResult<IEnumerable<ItemDTO>>> GetAllAsync()
         {
             var items = await _itemRepository.GetItemsAsync();
 
             if (items is null)
             {
-                _logger.LogError("There is no data. {MethodName}", nameof(Get));
+                _logger.LogError("There is no data. {MethodName}", nameof(GetAllAsync));
                 return NotFound("There is no data. Please try again!");
             }
 
@@ -45,11 +45,11 @@ namespace Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ItemDTO>> Get([FromQuery] string name)
+        public async Task<ActionResult<ItemDTO>> GetAsync([FromQuery] string name)
         {
             if (name is null)
             {
-                _logger.LogError("Invalid request in {MethodName} : {Request}", nameof(Get), name);
+                _logger.LogError("Invalid request in {MethodName} : {Request}", nameof(GetAsync), name);
                 return BadRequest("Invalid request. Please try again!");
             }
 
@@ -57,7 +57,7 @@ namespace Catalog.Api.Controllers
 
             if (item is null)
             {
-                _logger.LogError("No item in {MethodName} with the name: {Request}", nameof(Get), name);
+                _logger.LogError("No item in {MethodName} with the name: {Request}", nameof(GetAsync), name);
                 return NotFound("There is no item with the provided name. Please try again!");
             }
 
@@ -70,11 +70,11 @@ namespace Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ItemDTO>> Create([FromBody] ManageItemDTO request)
+        public async Task<ActionResult<ItemDTO>> CreateItemAsync([FromBody] ManageItemDTO request)
         {
             if (request is null || !ModelState.IsValid)
             {
-                _logger.LogError("Invalid request in {MethodName} : {@Request}", nameof(Create), request);
+                _logger.LogError("Invalid request in {MethodName} : {@Request}", nameof(CreateItemAsync), request);
                 return BadRequest("Invalid request. Please try again!");
             }
 
@@ -85,18 +85,18 @@ namespace Catalog.Api.Controllers
             await _itemRepository.CreateAsync(item);
             var itemDto = _mapper.Map<ItemDTO>(item);
 
-            return CreatedAtAction(nameof(Get), new { name = itemDto.Name }, itemDto);
+            return CreatedAtAction(nameof(GetAsync), new { name = itemDto.Name }, itemDto);
         }
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Update([FromQuery] string name, [FromBody] ManageItemDTO request)
+        public async Task<ActionResult> UpdateItemAsync([FromQuery] string name, [FromBody] ManageItemDTO request)
         {
             if (name is null)
             {
-                _logger.LogError("Invalid request in {MethodName} : {Request}", nameof(Update), name);
+                _logger.LogError("Invalid request in {MethodName} : {Request}", nameof(UpdateItemAsync), name);
                 return BadRequest("Invalid request. Please try again!");
             }
 
@@ -104,7 +104,7 @@ namespace Catalog.Api.Controllers
 
             if (item is null)
             {
-                _logger.LogError("No item in {MethodName} with the name: {Request}", nameof(Update), name);
+                _logger.LogError("No item in {MethodName} with the name: {Request}", nameof(UpdateItemAsync), name);
                 return NotFound("There is no item with the provided name. Please try again!");
             }
 
@@ -119,11 +119,11 @@ namespace Catalog.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Delete([FromQuery] string name)
+        public async Task<ActionResult> DeleteItemAsync([FromQuery] string name)
         {
             if (name is null)
             {
-                _logger.LogError("Invalid request in {MethodName} : {Request}", nameof(Delete), name);
+                _logger.LogError("Invalid request in {MethodName} : {Request}", nameof(DeleteItemAsync), name);
                 return BadRequest("Invalid request. Please try again!");
             }
 
@@ -131,7 +131,7 @@ namespace Catalog.Api.Controllers
 
             if (item is null)
             {
-                _logger.LogError("No item in {MethodName} with the name: {Request}", nameof(Delete), name);
+                _logger.LogError("No item in {MethodName} with the name: {Request}", nameof(DeleteItemAsync), name);
                 return NotFound("There is no item with the provided name. Please try again!");
             }
 
