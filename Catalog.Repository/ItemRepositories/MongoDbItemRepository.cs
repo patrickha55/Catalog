@@ -32,7 +32,6 @@ namespace Catalog.Repository.ItemRepositories
 
         public async Task CreateAsync(Item item)
         {
-
             await itemCollection.InsertOneAsync(item);
         }
 
